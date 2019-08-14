@@ -7,6 +7,11 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20190814220549_Add-VesselEvents.cs" />
+    <Compile Remove="Migrations\20190814220549_Add-VesselEvents.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />

@@ -10,6 +10,6 @@ namespace BattleTechCanonWarships.Models
         public Guid Id { get; set; }
         public string Title { get; set; }
         public int PageCount { get; set; }
-
+        public ICollection<SourceReview> SourceReviews { get; set;}
     }
 }

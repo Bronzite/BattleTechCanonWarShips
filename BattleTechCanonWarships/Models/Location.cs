@@ -11,5 +11,7 @@ namespace BattleTechCanonWarships.Models
         public string Name { get; set; }
         public int? X { get; set; }
         public int? Y { get; set; }
+        public Guid? ParentLocationId { get; set; }
+        public Location ParentLocation { get; set; }
     }
 }

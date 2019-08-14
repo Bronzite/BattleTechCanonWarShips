@@ -8,7 +8,7 @@ namespace BattleTechCanonWarships.Models
     public class Vessel
     {
         public Guid Id { get; set; }
-        
+        public ICollection<VesselEvent> Events { get; set; }
         public class Property
         {
             public Guid Id { get; set; }
