@@ -1,7 +1,7 @@
 ﻿@model BattleTechCanonWarships.Models.Vessel
 
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = Model.Name;
 }
 
 <div>
@@ -14,20 +14,20 @@
         {
         <div class="card mb-5">
             <div class="card-header">
-                @ve.Event.Title
+                @if (ve.Event.StartDate == ve.Event.EndDate)
+                {
+                    @ve.Event.StartDate.ToLongDateString()
+                }
+                else
+                {
+                    <span>
+                        @ve.Event.StartDate.ToLongDateString() to @ve.Event.EndDate.ToLongDateString()
+                    </span>
+                }
             </div>
             <div class="card-body">
                 <div class="font-weight-bold">
-                    @if (ve.Event.StartDate == ve.Event.EndDate)
-                    {
-                        @ve.Event.StartDate.ToLongDateString()
-                    }
-                    else
-                    {
-                        <span>
-                            @ve.Event.StartDate.ToLongDateString() to @ve.Event.EndDate.ToLongDateString()
-                        </span>
-                    }
+                    @ve.Event.Title
                 </div>
                 <div class="text-body">
                     @ve.Event.Description
@@ -63,7 +63,4 @@
         }
     </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

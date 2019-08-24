@@ -15,5 +15,12 @@ namespace BattleTechCanonWarships.Models
         public ICollection<VesselEvent> Vessels { get; set; }
         public Guid? LocationId { get; set; }
         public Location Location { get; set; }
+
+        public string GetDateString()
+        {
+            if (StartDate.Year < 1900) return "Date Unknown";
+            if (StartDate == EndDate) return StartDate.ToLongDateString();
+            return string.Format("{0} - {1}", StartDate.ToLongDateString(), EndDate.ToLongDateString());
+        }
     }
 }

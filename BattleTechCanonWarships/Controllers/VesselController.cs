@@ -11,10 +11,11 @@ namespace BattleTechCanonWarships.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return Redirect("/");
         }
 
         [Route("/Vessel/Detail/{guid}")]
+        [Route("/Vessel/{guid}")]
         public IActionResult Detail(Guid guid)
         {
             Vessel thisVessel = SiteStatics.Context.Vessels.Find(guid) as Vessel;

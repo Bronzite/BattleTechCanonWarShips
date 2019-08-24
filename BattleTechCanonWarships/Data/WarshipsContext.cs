@@ -31,6 +31,7 @@ namespace BattleTechCanonWarships.Data
         public DbSet<Source> Sources { get; set; }
         public DbSet<Event> Event { get; set; }
         public DbSet<ShipClass> ShipClasses { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
     }
 }

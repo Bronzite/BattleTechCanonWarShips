@@ -1,0 +1,23 @@
+﻿@model BattleTechCanonWarships.Models.Event
+
+@{
+    ViewData["Title"] = Model.GetDateString();
+}
+
+
+<h3>@Model.GetDateString()</h3>
+<h4>@Model.Location.ToString()</h4>
+
+<h4>@Model.Description</h4>
+<div class="text-body">
+    @Model.Description 
+</div>
+<div class="font-weight-bold">Related Vessels</div>
+<table class="table table-striped">
+    @foreach (VesselEvent ve in Model.Vessels)
+    {
+    <tr>
+        <td><a href="/Vessel/@ve.Vessel.Id.ToString()">@ve.Vessel.Name</a></td>
+    </tr>
+    }
+</table>

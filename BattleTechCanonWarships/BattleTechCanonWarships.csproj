@@ -12,6 +12,10 @@
     <Compile Remove="Migrations\20190814220549_Add-VesselEvents.Designer.cs" />
     <Compile Remove="Migrations\20190824194440_AddVesselName.cs" />
     <Compile Remove="Migrations\20190824194440_AddVesselName.Designer.cs" />
+    <Compile Remove="Migrations\20190824223636_AddedVesselsToShipClass.cs" />
+    <Compile Remove="Migrations\20190824223636_AddedVesselsToShipClass.Designer.cs" />
+    <Compile Remove="Migrations\20190824231542_LocationsCoreObject.cs" />
+    <Compile Remove="Migrations\20190824231542_LocationsCoreObject.Designer.cs" />
   </ItemGroup>
 
 

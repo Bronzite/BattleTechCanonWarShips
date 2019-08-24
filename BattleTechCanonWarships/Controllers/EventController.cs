@@ -7,23 +7,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BattleTechCanonWarships.Controllers
 {
-    public class ShipClassController : Controller
+    public class EventController : Controller
     {
         public IActionResult Index()
         {
             return Redirect("/");
         }
 
-        [Route("/ShipClass/Detail/{guid}")]
-        [Route("/ShipClass/{guid}")]
+        [Route("/Event/Detail/{guid}")]
+        [Route("/Event/{guid}")]
         public IActionResult Detail(Guid guid)
         {
-            ShipClass retval = SiteStatics.Context.ShipClasses.Find(guid) as ShipClass;
-            
+            Event retval = SiteStatics.Context.Event.Find(guid) as Event;
             if (retval == null) return Redirect("/");
             SiteStatics.Context.Entry(retval).Collection("Vessels").Load();
-            
+            foreach(VesselEvent ve in retval.Vessels)
+            {
+                SiteStatics.Context.Entry(ve).Reference("Vessel").Load();
+            }
+            SiteStatics.Context.Entry(retval).Reference("Location").Load();
+            retval.Location.FullLoad();
             return View(retval);
         }
-    }
+}
 }

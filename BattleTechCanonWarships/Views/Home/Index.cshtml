@@ -11,7 +11,9 @@
             <div class="card">
                 <div class="card-header">Featured Class</div>
                 <div class="card-body">
-                    <div class="font-weight-bold">@Model.FeaturedClass.Name</div>
+                    <a href="/ShipClass/Detail/@Model.FeaturedClass.Id.ToString()">
+                        <div class="font-weight-bold">@Model.FeaturedClass.Name</div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -29,7 +31,9 @@
             <div class="card">
                 <div class="card-header">Featured Event</div>
                 <div class="card-body">
-                    <div class="font-weight-bold">@Model.FeaturedEvent.Title</div>
+                    <a href="/Event/Detail/@Model.FeaturedEvent.Id.ToString()">
+                        <div class="font-weight-bold">@Model.FeaturedEvent.Title</div>
+                    </a>
                 </div>
             </div>
         </div>

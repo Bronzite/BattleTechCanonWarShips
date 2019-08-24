@@ -1,0 +1,32 @@
+﻿@model BattleTechCanonWarships.Models.ShipClass
+
+@{
+    ViewData["Title"] = string.Format("{0}-class {1}", Model.Name, Model.Role);
+}
+
+
+
+    <div>
+        <h2>@Model.Name class</h2>
+        <hr />
+        <h3>@Model.Tonnage.ToString("#,##0")-ton @Model.Role</h3>
+        <table class="table table-borderless table-sm">
+            <tr><td>Introduced</td><td>@Model.IntroductionYear</td></tr>
+            <tr><td>Length</td><td>@Model.Length</td></tr>
+            <tr><td>Crew</td><td>@Model.Crew</td></tr>
+        </table>
+
+    </div>
+<div>
+    <h3>Class Members</h3>
+    <table class="table table-striped">
+        @foreach(Vessel v in Model.Vessels)
+        {
+            <tr>
+                <td><a href="/Vessel/Detail/@v.Id.ToString()">@v.Name</a></td>
+            </tr>
+        }
+
+    </table>
+
+</div>
