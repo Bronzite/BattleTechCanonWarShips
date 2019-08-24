@@ -1,8 +1,38 @@
-﻿@{
+﻿@model BattleTechCanonWarships.ModelViews.HomeIndexModelView
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">BattleTech Warships Archive</h1>
+    <p>A Naval History of the Inner Sphere, and surrounding parsecs.</p>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Featured Class</div>
+                <div class="card-body">
+                    <div class="font-weight-bold">@Model.FeaturedClass.Name</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Featured Vessel</div>
+                <div class="card-body">
+                    <a href="/Vessel/Detail/@Model.FeaturedVessel.Id.ToString()">
+                        <div class="font-weight-bold">@Model.FeaturedVessel.Name</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Featured Event</div>
+                <div class="card-body">
+                    <div class="font-weight-bold">@Model.FeaturedEvent.Title</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

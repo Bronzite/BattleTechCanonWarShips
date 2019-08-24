@@ -16,5 +16,6 @@ namespace BattleTechCanonWarships.Models
         public int Crew { get; set;}
         public int? NumberInClass { get; set; }
         public string Image { get; set; }
+        public ICollection<Vessel> Vessels { get; set; }
     }
 }

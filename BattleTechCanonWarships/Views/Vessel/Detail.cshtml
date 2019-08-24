@@ -1,0 +1,69 @@
+﻿@model BattleTechCanonWarships.Models.Vessel
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<div>
+    <h2>@Model.Name</h2>
+    <h4><a href="/ShipClass/@Model.ShipClassId.ToString()"><i>@Model.ShipClass.Name</i>-class @Model.ShipClass.Role</a></h4>
+    <hr />
+    <h3>Service History</h3>
+    <div class="w-75">
+        @foreach(VesselEvent ve in Model.Events)
+        {
+        <div class="card mb-5">
+            <div class="card-header">
+                @ve.Event.Title
+            </div>
+            <div class="card-body">
+                <div class="font-weight-bold">
+                    @if (ve.Event.StartDate == ve.Event.EndDate)
+                    {
+                        @ve.Event.StartDate.ToLongDateString()
+                    }
+                    else
+                    {
+                        <span>
+                            @ve.Event.StartDate.ToLongDateString() to @ve.Event.EndDate.ToLongDateString()
+                        </span>
+                    }
+                </div>
+                <div class="text-body">
+                    @ve.Event.Description
+                </div>
+                @if (ve.PropertyChanges.Count > 0)
+                {
+                    <h4>Ship Changes</h4>
+                    <table class="table table-striped">
+                        @foreach (Vessel.PropertyChange change in ve.PropertyChanges)
+                        {
+                            <tr>
+                                <td>@change.Property.Name </td>
+                                <td>@change.PreviousValue</td>
+                                <td>=></td>
+                                <td>@change.Value</td>
+                            </tr>
+                        }
+                    </table>
+                }
+                </div>
+            @if (ve.References.Count > 0)
+            {
+                <div class="card-footer">
+                    @foreach (Reference reference in ve.References)
+                    {
+                    <span>
+                        <div class="font-italic">@reference.Source.Title, page @reference.Page</div>
+                    </span>
+                    }
+                </div>
+            }
+            </div>
+        }
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
