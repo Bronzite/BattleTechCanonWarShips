@@ -12,6 +12,7 @@ namespace BattleTechCanonWarships.Models
         public DateTime? URLCapture { get; set; }
         public Guid? SourceId { get; set; }
         public Source Source { get; set; }
+        public int? Page { get; set; }
         public string Quote { get; set; }
         public string CreateBy { get; set; }
         public DateTime CreatedOn { get; set; }

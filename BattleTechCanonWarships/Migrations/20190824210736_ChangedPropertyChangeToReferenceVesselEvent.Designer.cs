@@ -4,14 +4,16 @@ using BattleTechCanonWarships.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BattleTechCanonWarships.Migrations
 {
     [DbContext(typeof(WarshipsContext))]
-    partial class WarshipsContextModelSnapshot : ModelSnapshot
+    [Migration("20190824210736_ChangedPropertyChangeToReferenceVesselEvent")]
+    partial class ChangedPropertyChangeToReferenceVesselEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

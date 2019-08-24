@@ -12,9 +12,9 @@ namespace BattleTechCanonWarships.Models
         public int Tonnage { get; set; }
         public int IntroductionYear { get; set; }
         public int Length { get; set; }
-        public int Role { get; set; }
+        public string Role { get; set; }
         public int Crew { get; set;}
-        public int NumberInClass { get; set; }
+        public int? NumberInClass { get; set; }
         public string Image { get; set; }
     }
 }

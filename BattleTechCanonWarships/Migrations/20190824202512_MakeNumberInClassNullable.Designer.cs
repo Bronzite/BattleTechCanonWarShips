@@ -4,14 +4,16 @@ using BattleTechCanonWarships.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BattleTechCanonWarships.Migrations
 {
     [DbContext(typeof(WarshipsContext))]
-    partial class WarshipsContextModelSnapshot : ModelSnapshot
+    [Migration("20190824202512_MakeNumberInClassNullable")]
+    partial class MakeNumberInClassNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,15 +196,19 @@ namespace BattleTechCanonWarships.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("EventId");
+
                     b.Property<string>("PreviousValue");
 
                     b.Property<Guid>("PropertyId");
 
                     b.Property<string>("Value");
 
-                    b.Property<Guid>("VesselEventId");
+                    b.Property<Guid?>("VesselEventId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
 
                     b.HasIndex("PropertyId");
 
@@ -276,15 +282,19 @@ namespace BattleTechCanonWarships.Migrations
 
             modelBuilder.Entity("BattleTechCanonWarships.Models.Vessel+PropertyChange", b =>
                 {
+                    b.HasOne("BattleTechCanonWarships.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("BattleTechCanonWarships.Models.Vessel+Property", "Property")
                         .WithMany()
                         .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BattleTechCanonWarships.Models.VesselEvent", "VesselEvent")
+                    b.HasOne("BattleTechCanonWarships.Models.VesselEvent")
                         .WithMany("PropertyChanges")
-                        .HasForeignKey("VesselEventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("VesselEventId");
                 });
 
             modelBuilder.Entity("BattleTechCanonWarships.Models.VesselEvent", b =>
