@@ -37,13 +37,15 @@ namespace BattleTechCanonWarships
                     ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
                     configurationBuilder.AddJsonFile("appsettings.json");
                     IConfiguration TempConfiguration = configurationBuilder.Build();
-                    IConfigurationSection IncludeFiles = TempConfiguration.GetSection("IncludeFiles");
-                    List<string> Includes = IncludeFiles.Get<List<string>>();
-                    foreach (string s in Includes)
+                    if (TempConfiguration != null)
                     {
-                        configurationBuilder.AddJsonFile(s);
+                        IConfigurationSection IncludeFiles = TempConfiguration.GetSection("IncludeFiles");
+                        List<string> Includes = IncludeFiles.Get<List<string>>();
+                        foreach (string s in Includes)
+                        {
+                            configurationBuilder.AddJsonFile(s);
+                        }
                     }
-
                     mConfiguration = configurationBuilder.Build();
 
                 }
