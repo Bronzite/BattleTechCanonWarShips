@@ -19,7 +19,7 @@ namespace BattleTechCanonWarships.Controllers
             LocationModelView retval = new LocationModelView();
             retval.Location = selectedLocation;
             selectedLocation.FullLoad();
-            retval.ChildLocations = new List<Location>(SiteStatics.Context.Locations.Where(x => x.ParentLocationId == selectedLocation.ParentLocationId));
+            retval.ChildLocations = new List<Location>(SiteStatics.Context.Locations.Where(x => x.ParentLocationId == selectedLocation.Id));
 
             retval.Events = new List<Event>(SiteStatics.Context.Event.Where(x => x.LocationId == selectedLocation.Id));
 
