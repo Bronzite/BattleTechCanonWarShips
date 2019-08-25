@@ -1,0 +1,96 @@
+﻿@model BattleTechCanonWarships.ModelViews.SearchResultModelView
+@{
+    ViewData["Title"] = "Results";
+}
+
+<h1>Results</h1>
+<div>
+    <center>
+        <form action="/Search/Result" method="post">
+            <input class="form-control" name="query" value="@Model.Query" placeholder="Search string" /> <br/>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </center>
+</div>
+@if (Model.Events.Count == 0 &&
+Model.Vessels.Count == 0 &&
+Model.Locations.Count == 0 &&
+Model.ShipClasses.Count == 0)
+{
+    <center><i>No results found.</i></center>
+}
+else
+{
+    if (Model.Events.Count > 0)
+    {
+        <div class="card">
+            <div class="card-header">Matching Events</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    @foreach (Event e in Model.Events)
+                    {
+                        <tr>
+                            <td><a href="/Event/@e.Id.ToString()">@e.Title</a></td>
+                            <td>@e.GetDateString()</td>
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        </div>
+    }
+    if (Model.Vessels.Count > 0)
+    {
+        <div class="card">
+            <div class="card-header">Matching Vessels</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    @foreach (Vessel v in Model.Vessels)
+                    {
+                        <tr>
+                            <td><a href="/Vessel/@v.Id.ToString()">@v.Name</a></td>
+                            <td>Something-something-class</td>
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        </div>
+    }
+    if (Model.ShipClasses.Count > 0)
+    {
+        <div class="card">
+            <div class="card-header">Matching Vessels</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    @foreach (ShipClass sc in Model.ShipClasses)
+                    {
+                        <tr>
+                            <td><a href="/ShipClass/@sc.Id.ToString()">@sc.Name</a></td>
+                            <td>@sc.Tonnage.ToString("#,##0")-ton @sc.Role</td>
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        </div>
+    }
+    if (Model.Locations.Count > 0)
+    {
+        <div class="card">
+            <div class="card-header">Matching Vessels</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    @foreach (Location l in Model.Locations)
+                    {
+                        <tr>
+                            <td><a href="/Location/@l.Id.ToString()">@l.Name</a></td>
+                            <td></td>
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        </div>
+    }
+}

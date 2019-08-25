@@ -14,16 +14,7 @@
         {
         <div class="card mb-5">
             <div class="card-header">
-                @if (ve.Event.StartDate == ve.Event.EndDate)
-                {
-                    @ve.Event.StartDate.ToLongDateString()
-                }
-                else
-                {
-                    <span>
-                        @ve.Event.StartDate.ToLongDateString() to @ve.Event.EndDate.ToLongDateString()
-                    </span>
-                }
+                @ve.Event.GetDateString()
             </div>
             <div class="card-body">
                 <div class="font-weight-bold">
@@ -34,8 +25,8 @@
                 </div>
                 @if (ve.PropertyChanges.Count > 0)
                 {
-                    <h4>Ship Changes</h4>
-                    <table class="table table-striped">
+                    
+                    <table class="table table-striped table-sm text-monospace">
                         @foreach (Vessel.PropertyChange change in ve.PropertyChanges)
                         {
                             <tr>

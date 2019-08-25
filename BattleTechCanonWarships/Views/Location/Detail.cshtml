@@ -1,0 +1,47 @@
+﻿@model BattleTechCanonWarships.ModelViews.LocationModelView
+@{
+    ViewData["Title"] = Model.Location.Name;
+}
+
+<h1>@Model.Location.Name</h1>
+@if (Model.Location.ParentLocation != null)
+{
+<a href="/Location/@Model.Location.ParentLocationId"><h2>@Model.Location.ParentLocation.ToString()</h2></a>
+}
+@if (Model.ChildLocations.Count > 0)
+{
+    <div class="card">
+        <div class="card-header">
+            Locations in @Model.Location
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-sm">
+                @foreach (Location l in Model.ChildLocations)
+                {
+                    <tr>
+                        <td><a href="/Location/@l.Id.ToString()">@l.Name</a></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+}
+@if (Model.Events.Count > 0)
+{
+    <div class="card">
+        <div class="card-header">
+            Events in @Model.Location
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-sm">
+                @foreach (Event e in Model.Events)
+                {
+                    <tr>
+                        <td><a href="/Event/@e.Id.ToString()">@e.Description</a></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+}
+

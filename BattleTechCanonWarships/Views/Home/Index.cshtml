@@ -3,40 +3,50 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">BattleTech Warships Archive</h1>
-    <p>A Naval History of the Inner Sphere, and surrounding parsecs.</p>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Featured Class</div>
-                <div class="card-body">
-                    <a href="/ShipClass/Detail/@Model.FeaturedClass.Id.ToString()">
-                        <div class="font-weight-bold">@Model.FeaturedClass.Name</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Featured Vessel</div>
-                <div class="card-body">
-                    <a href="/Vessel/Detail/@Model.FeaturedVessel.Id.ToString()">
-                        <div class="font-weight-bold">@Model.FeaturedVessel.Name</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Featured Event</div>
-                <div class="card-body">
-                    <a href="/Event/Detail/@Model.FeaturedEvent.Id.ToString()">
-                        <div class="font-weight-bold">@Model.FeaturedEvent.Title</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="text-center">
+        <h1 class="display-4">BattleTech Warships Archive</h1>
+        <p>A Naval History of the Inner Sphere, and surrounding parsecs.</p>
 
-</div>
+        <div class="col-md-12">
+            <center>
+                <form action="/Search/Result" method="post">
+                    <input class="form-control" name="query" value="" placeholder="Search string" /> <br />
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            </center>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Featured Class</div>
+                    <div class="card-body">
+                        <a href="/ShipClass/Detail/@Model.FeaturedClass.Id.ToString()">
+                            <div class="font-weight-bold">@Model.FeaturedClass.Name</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Featured Vessel</div>
+                    <div class="card-body">
+                        <a href="/Vessel/Detail/@Model.FeaturedVessel.Id.ToString()">
+                            <div class="font-weight-bold">@Model.FeaturedVessel.Name</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Featured Event</div>
+                    <div class="card-body">
+                        <a href="/Event/Detail/@Model.FeaturedEvent.Id.ToString()">
+                            <div class="font-weight-bold">@Model.FeaturedEvent.Title</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
