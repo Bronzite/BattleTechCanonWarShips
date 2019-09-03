@@ -18,7 +18,7 @@ namespace BattleTechCanonWarships.Models
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            
+
         }
         public class PropertyChange
         {
@@ -30,5 +30,49 @@ namespace BattleTechCanonWarships.Models
             public string PreviousValue { get; set; }
             public string Value { get; set; }
         }
+    }
+
+    public class VesselSummary
+    {
+        public VesselSummary(Vessel v)
+        {
+            VesselId = v.Id;
+            VesselName = v.Name;
+            VesselClassId = v.ShipClassId;
+            VesselClassName = v.ShipClass.Name;
+        }
+
+        public Guid VesselId { get; set; }
+        public string VesselName { get; set; }
+        public Guid VesselClassId { get; set; }
+        public string VesselClassName { get; set; }
+    }
+
+    public class VesselDetail
+    {
+        public VesselDetail(Vessel v)
+        {
+            VesselId = v.Id;
+            VesselName = v.Name;
+            VesselClassId = v.ShipClassId;
+            VesselClassName = v.ShipClass.Name;
+            if (PreviousVesselId.HasValue)
+            {
+                PreviousVesselId = v.PreviousVesselId;
+                PreviousVesselName = v.PreviousVessel.Name;
+            }
+            EventIds = new List<Guid>();
+            foreach(VesselEvent evt in v.Events)
+            {
+                EventIds.Add(evt.EventId);
+            }
+        }
+        public Guid VesselId { get; set; }
+        public string VesselName { get; set; }
+        public Guid VesselClassId { get; set; }
+        public string VesselClassName { get; set; }
+        public Guid? PreviousVesselId { get; set; }
+        public string PreviousVesselName { get; set; }
+        public List<Guid> EventIds { get; set; }
     }
 }
