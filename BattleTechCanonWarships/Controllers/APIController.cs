@@ -32,5 +32,30 @@ namespace BattleTechCanonWarships.Controllers
 
             return new JsonResult(retval);
         }
+
+        [Route("/api/ShipClasses")]
+        public IActionResult ShipClassList()
+        {
+            IEnumerable<ShipClass> shipclasses = SiteStatics.Context.ShipClasses;
+            List<ShipClassSummary> retval = new List<ShipClassSummary>();
+            foreach (ShipClass sc in shipclasses)
+            {
+                SiteStatics.Context.Entry(sc).Collection("Vessels").Load();
+                retval.Add(new ShipClassSummary(sc));
+            }
+
+            return new JsonResult(retval);
+        }
+
+        [Route("/api/ShipClass/{id}")]
+        public IActionResult ShipClassDetail(Guid id)
+        {
+            ShipClass shipclass = SiteStatics.Context.ShipClasses.Find(id);
+            SiteStatics.Context.Entry(shipclass).Collection("Vessels").Load();
+            ShipClassDetail retval = new ShipClassDetail(shipclass);
+            
+            
+            return new JsonResult(retval);
+        }
     }
 }
