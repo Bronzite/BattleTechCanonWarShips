@@ -57,5 +57,32 @@ namespace BattleTechCanonWarships.Controllers
             
             return new JsonResult(retval);
         }
+
+        [Route("/api/Locations")]
+        public IActionResult LocationList()
+        {
+            IEnumerable<Location> shipclasses = SiteStatics.Context.Locations;
+            List<LocationSummary> retval = new List<LocationSummary>();
+            //TODO: Maybe we can link up all locations in the webserver using the list we just downloaded?
+            foreach (Location loc in shipclasses)
+            {
+                //Not loading all locations for time management purposes.
+                retval.Add(new LocationSummary(loc));
+            }
+
+
+            return new JsonResult(retval);
+        }
+
+        [Route("/api/Location/{id}")]
+        public IActionResult LocationDetail(Guid id)
+        {
+            Location location = SiteStatics.Context.Locations.Find(id);
+            location.FullLoad();
+            LocationDetail retval = new LocationDetail(location);
+
+
+            return new JsonResult(retval);
+        }
     }
 }
