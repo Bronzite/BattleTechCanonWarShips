@@ -11,5 +11,16 @@ namespace BattleTechCanonWarships.Models
         public string Title { get; set; }
         public int PageCount { get; set; }
         public ICollection<SourceReview> SourceReviews { get; set;}
+
+        public class SourceSummary
+        {
+            public SourceSummary(Source s)
+            {
+                Id = s.Id;
+                Title = s.Title;
+            }
+            public Guid Id { get; set; }
+            public string Title { get; set; }
+        }
     }
 }

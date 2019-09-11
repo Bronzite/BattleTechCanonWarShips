@@ -32,6 +32,19 @@ namespace BattleTechCanonWarships.Models
         }
     }
 
+    public class PropertyChangeSummary
+    {
+        public PropertyChangeSummary(Vessel.PropertyChange p)
+        {
+            Property = p.Property.Name;
+            Previous = p.PreviousValue;
+            New = p.Value;
+        }
+        public string Property { get; set; }
+        public string Previous { get; set; }
+        public string New { get; set; }
+    }
+
     public class VesselSummary
     {
         public VesselSummary(Vessel v)

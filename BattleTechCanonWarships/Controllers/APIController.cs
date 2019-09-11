@@ -84,5 +84,52 @@ namespace BattleTechCanonWarships.Controllers
 
             return new JsonResult(retval);
         }
+
+        [Route("/api/Events")]
+        public IActionResult EventList()
+        {
+            IEnumerable<Event> events = SiteStatics.Context.Event;
+            List<EventSummary> retval = new List<EventSummary>();
+            
+            foreach (Event curEvent in events)
+            {
+                SiteStatics.Context.Entry(curEvent).Reference("Location").Load();
+                SiteStatics.Context.Entry(curEvent).Collection("Vessels").Load();
+                retval.Add(new EventSummary(curEvent));
+            }
+
+
+            return new JsonResult(retval);
+        }
+
+        [Route("/api/Event/{id}")]
+        public IActionResult EventDetail(Guid id)
+        {
+            Event curevent = SiteStatics.Context.Event.Find(id);
+            SiteStatics.Context.Entry(curevent).Reference("Location").Load();
+            SiteStatics.Context.Entry(curevent).Collection("Vessels").Load();
+            foreach(VesselEvent ve in curevent.Vessels)
+            {
+                ve.Event = curevent;
+                SiteStatics.Context.Entry(ve).Reference("Vessel").Load();
+                SiteStatics.Context.Entry(ve.Vessel).Reference("ShipClass").Load();
+                SiteStatics.Context.Entry(ve).Collection("References").Load();
+                SiteStatics.Context.Entry(ve).Collection("PropertyChanges").Load();
+                foreach(Reference r in ve.References)
+                {
+                    SiteStatics.Context.Entry(r).Reference("Source").Load();
+                }
+                foreach(Vessel.PropertyChange pc in ve.PropertyChanges)
+                {
+                    SiteStatics.Context.Entry(pc).Reference("Property").Load();
+
+                }
+            }
+
+            EventDetail retval = new EventDetail(curevent);
+
+
+            return new JsonResult(retval);
+        }
     }
 }

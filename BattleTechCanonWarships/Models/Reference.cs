@@ -19,4 +19,27 @@ namespace BattleTechCanonWarships.Models
         public string ValidatedBy { get; set; }
         public DateTime? ValidatedOn { get; set; }
     }
+
+    public class ReferenceSummary
+    {
+        public ReferenceSummary(Reference r)
+        {
+            Id = r.Id;
+            if(r.URL != null) 
+            {
+                Description = r.URL;
+                if(r.URLCapture.HasValue)
+                {
+                    Description = string.Format("{0} (retrieved {1})", r.URL, r.URLCapture.Value.ToShortDateString());
+                }
+            }
+            else
+            {
+                Description = string.Format("{0} p. {1}", r.Source.Title, r.Page);
+            }
+        }
+
+        public Guid Id { get; set; }
+        public string Description {get;set;}
+    }
 }
