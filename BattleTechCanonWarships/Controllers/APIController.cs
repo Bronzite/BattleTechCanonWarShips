@@ -1,32 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using BattleTechCanonWarships.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BattleTechCanonWarships.Controllers
 {
     public class APIController : Controller
     {
         [Route("/api/Vessel/Detail/{id}")]
-        public IActionResult VesselDetail(Guid id)
+        public async Task<IActionResult> VesselDetail(Guid id)
         {
-            Vessel retval = SiteStatics.Context.Vessels.Find(id);
-            SiteStatics.Context.Entry(retval).Reference("ShipClass").Load();
-            SiteStatics.Context.Entry(retval).Collection("Events").Load();
-            SiteStatics.Context.Entry(retval).Reference("PreviousVessel").Load();
+            List<Vessel> vesselList = await SiteStatics.Context.Vessels
+                                                 .Include(x => x.ShipClass)
+                                                 .Include(x => x.Events)
+                                                 .Include(x => x.PreviousVessel)
+                                                 .ToListAsync();
+
+            Vessel retval = vesselList.First();
+
             return new JsonResult(new VesselDetail( retval));
         }
 
         [Route("/api/Vessels")]
-        public IActionResult VesselList()
+        public async Task<IActionResult> VesselList()
         {
-            IEnumerable<Vessel> vessels = SiteStatics.Context.Vessels;
+            IEnumerable<Vessel> vessels = await SiteStatics.Context.Vessels.Include(x=>x.ShipClass).ToListAsync();
             List<VesselSummary> retval = new List<VesselSummary>();
             foreach (Vessel v in vessels)
             {
-                SiteStatics.Context.Entry(v).Reference("ShipClass").Load();
                 retval.Add(new VesselSummary(v));
             }
 
@@ -34,13 +39,12 @@ namespace BattleTechCanonWarships.Controllers
         }
 
         [Route("/api/ShipClasses")]
-        public IActionResult ShipClassList()
+        public async Task<IActionResult> ShipClassList()
         {
-            IEnumerable<ShipClass> shipclasses = SiteStatics.Context.ShipClasses;
+            IEnumerable<ShipClass> shipclasses = await SiteStatics.Context.ShipClasses.Include(x=>x.Vessels).ToListAsync();
             List<ShipClassSummary> retval = new List<ShipClassSummary>();
             foreach (ShipClass sc in shipclasses)
             {
-                SiteStatics.Context.Entry(sc).Collection("Vessels").Load();
                 retval.Add(new ShipClassSummary(sc));
             }
 
@@ -48,18 +52,22 @@ namespace BattleTechCanonWarships.Controllers
         }
 
         [Route("/api/ShipClass/{id}")]
-        public IActionResult ShipClassDetail(Guid id)
+        public async Task<IActionResult> ShipClassDetail(Guid id)
         {
-            ShipClass shipclass = SiteStatics.Context.ShipClasses.Find(id);
-            SiteStatics.Context.Entry(shipclass).Collection("Vessels").Load();
+            List<ShipClass> lstClasses = await SiteStatics.Context
+                                                          .ShipClasses
+                                                          .Include(x => x.Vessels)
+                                                          .Where(x => x.Id == id)
+                                                          .ToListAsync();
+            ShipClass shipclass = lstClasses.First();
+            
             ShipClassDetail retval = new ShipClassDetail(shipclass);
-            
-            
+
             return new JsonResult(retval);
         }
 
         [Route("/api/Locations")]
-        public IActionResult LocationList()
+        public async Task<IActionResult> LocationList()
         {
             IEnumerable<Location> shipclasses = SiteStatics.Context.Locations;
             List<LocationSummary> retval = new List<LocationSummary>();
@@ -75,57 +83,54 @@ namespace BattleTechCanonWarships.Controllers
         }
 
         [Route("/api/Location/{id}")]
-        public IActionResult LocationDetail(Guid id)
+        public async Task<IActionResult> LocationDetail(Guid id)
         {
-            Location location = SiteStatics.Context.Locations.Find(id);
-            location.FullLoad();
-            LocationDetail retval = new LocationDetail(location);
+            List<Location> locations = await SiteStatics.Context
+                                           .Locations
+                                           .Include(x => x.ParentLocation)
+                                           .ToListAsync();
+            Location location = null;
+            if (locations.Count > 0) location = locations.First();
 
+            LocationDetail retval = new LocationDetail(location);
 
             return new JsonResult(retval);
         }
 
         [Route("/api/Events")]
-        public IActionResult EventList()
+        public async Task<IActionResult> EventList()
         {
-            IEnumerable<Event> events = SiteStatics.Context.Event;
+            IEnumerable<Event> events = await SiteStatics.Context.Event
+                                                           .Include(x=>x.Location)
+                                                           .Include(x=>x.Vessels)
+                                                           .ToListAsync();
             List<EventSummary> retval = new List<EventSummary>();
             
             foreach (Event curEvent in events)
-            {
-                SiteStatics.Context.Entry(curEvent).Reference("Location").Load();
-                SiteStatics.Context.Entry(curEvent).Collection("Vessels").Load();
                 retval.Add(new EventSummary(curEvent));
-            }
 
 
             return new JsonResult(retval);
         }
 
         [Route("/api/Event/{id}")]
-        public IActionResult EventDetail(Guid id)
+        public async Task<IActionResult> EventDetail(Guid id)
         {
-            Event curevent = SiteStatics.Context.Event.Find(id);
-            SiteStatics.Context.Entry(curevent).Reference("Location").Load();
-            SiteStatics.Context.Entry(curevent).Collection("Vessels").Load();
-            foreach(VesselEvent ve in curevent.Vessels)
-            {
-                ve.Event = curevent;
-                SiteStatics.Context.Entry(ve).Reference("Vessel").Load();
-                SiteStatics.Context.Entry(ve.Vessel).Reference("ShipClass").Load();
-                SiteStatics.Context.Entry(ve).Collection("References").Load();
-                SiteStatics.Context.Entry(ve).Collection("PropertyChanges").Load();
-                foreach(Reference r in ve.References)
-                {
-                    SiteStatics.Context.Entry(r).Reference("Source").Load();
-                }
-                foreach(Vessel.PropertyChange pc in ve.PropertyChanges)
-                {
-                    SiteStatics.Context.Entry(pc).Reference("Property").Load();
-
-                }
-            }
-
+            List<Event> curevents = await SiteStatics.Context.Event
+                                                .Include(x=>x.Vessels)
+                                                .ThenInclude(y=>y.References)
+                                                .ThenInclude(z=>z.Source)
+                                                .Include(x=>x.Location)
+                                                .Include(x=>x.Vessels)
+                                                .ThenInclude(y=>y.Vessel)
+                                                .ThenInclude(z=>z.ShipClass)
+                                                .Include(x=>x.Vessels)
+                                                .ThenInclude(y=>y.PropertyChanges)
+                                                .ThenInclude(z=>z.Property)
+                                                .Where(x => x.Id == id)
+                                                .ToListAsync();
+            Event curevent = curevents.First();
+            
             EventDetail retval = new EventDetail(curevent);
 
 

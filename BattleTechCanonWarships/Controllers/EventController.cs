@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BattleTechCanonWarships.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BattleTechCanonWarships.Controllers
 {
@@ -16,17 +18,18 @@ namespace BattleTechCanonWarships.Controllers
 
         [Route("/Event/Detail/{guid}")]
         [Route("/Event/{guid}")]
-        public IActionResult Detail(Guid guid)
+        public async Task<IActionResult> Detail(Guid guid)
         {
-            Event retval = SiteStatics.Context.Event.Find(guid) as Event;
+            List<Event> lstEvents = await SiteStatics.Context
+                                                     .Event
+                                                     .Where(x => x.Id == guid)
+                                                     .Include(x=>x.Vessels)
+                                                     .ThenInclude(y=>y.Vessel)
+                                                     .Include(x=>x.Location)
+                                                     .ToListAsync();
+            Event retval = lstEvents.First();
             if (retval == null) return Redirect("/");
-            SiteStatics.Context.Entry(retval).Collection("Vessels").Load();
-            foreach(VesselEvent ve in retval.Vessels)
-            {
-                SiteStatics.Context.Entry(ve).Reference("Vessel").Load();
-            }
-            SiteStatics.Context.Entry(retval).Reference("Location").Load();
-            retval.Location.FullLoad();
+
             return View(retval);
         }
 }

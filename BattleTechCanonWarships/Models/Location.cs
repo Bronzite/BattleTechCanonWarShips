@@ -14,15 +14,6 @@ namespace BattleTechCanonWarships.Models
         public Guid? ParentLocationId { get; set; }
         public Location ParentLocation { get; set; }
 
-        public void FullLoad()
-        {
-            if (ParentLocationId.HasValue)
-            {
-                ParentLocation = SiteStatics.Context.Locations.Find(ParentLocationId.Value);
-                ParentLocation.FullLoad();
-            }
-        }
-
         public override string ToString()
         {
             if (ParentLocation != null) return string.Format("{0}, {1}", Name, ParentLocation.ToString());
