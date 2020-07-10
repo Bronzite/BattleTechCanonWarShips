@@ -47,10 +47,17 @@ else
                 <table class="table table-striped">
                     @foreach (Vessel v in Model.Vessels)
                     {
-                        <tr>
-                            <td><a href="/Vessel/@v.Id.ToString()">@v.Name</a></td>
-                            <td>Something-something-class</td>
-                        </tr>
+                    <tr>
+                        <td><a href="/Vessel/@v.Id.ToString()">@v.Name</a></td>
+                        @if (v.ShipClass != null)
+                        {
+                            <td><a href="/ShipClass/@v.ShipClassId.ToString()">@v.ShipClass.Name</a></td>
+                        }
+                        else
+                        {
+                            <td><a href="/ShipClass/@v.ShipClassId.ToString()">Unknown Class</a></td>
+                        }
+                    </tr>
                     }
                 </table>
 

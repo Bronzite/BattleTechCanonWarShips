@@ -6,30 +6,39 @@ using BattleTechCanonWarships.Models;
 using BattleTechCanonWarships.ModelViews;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BattleTechCanonWarships.Controllers
 {
     public class SearchController : Controller
     {
         [Route("/Search/{query}")]
-        public IActionResult Results(string query)
+        public async Task<IActionResult> Results(string query)
         {
             if (query.Trim().Length < 3) return Redirect("/");
 
             SearchResultModelView retval = new SearchResultModelView();
             retval.Query = query;
-            retval.ShipClasses = new List<ShipClass>( SiteStatics.Context.ShipClasses.Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase)));
-            retval.Vessels = new List<Vessel>(SiteStatics.Context.Vessels.Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase)));
-            retval.Events = new List<Event>(SiteStatics.Context.Event.Where(x => x.Description.Contains(query, StringComparison.CurrentCultureIgnoreCase) || x.Title.Contains(query,StringComparison.CurrentCultureIgnoreCase)));
-            retval.Locations = new List<Location>(SiteStatics.Context.Locations.Where(x => x.Name.Contains(query,StringComparison.CurrentCultureIgnoreCase)));
-
+            retval.ShipClasses = await SiteStatics.Context.ShipClasses
+                                                          .Where(x =>x.Name.Contains(query))
+                                                          .ToListAsync();
+            retval.Vessels = await SiteStatics.Context.Vessels
+                                                .Include(x => x.ShipClass)
+                                                .Where(x => x.Name.Contains(query))
+                                                .ToListAsync();
+            retval.Events = await SiteStatics.Context.Event
+                                                     .Where(x => x.Description.Contains(query) || x.Title.Contains(query))
+                                                     .ToListAsync();
+            retval.Locations = await SiteStatics.Context.Locations
+                                                        .Where(x => x.Name.Contains(query))
+                                                        .ToListAsync();
 
 
             return View(retval);
         }
 
         [HttpPost]
-        public IActionResult Results(FormCollection formCollection)
+        public async Task<IActionResult> Results(FormCollection formCollection)
         {
             string query = "";
             if (formCollection.ContainsKey("query")) query = formCollection["query"];
@@ -38,10 +47,19 @@ namespace BattleTechCanonWarships.Controllers
 
             SearchResultModelView retval = new SearchResultModelView();
             retval.Query = query;
-            retval.ShipClasses = new List<ShipClass>(SiteStatics.Context.ShipClasses.Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase)));
-            retval.Vessels = new List<Vessel>(SiteStatics.Context.Vessels.Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase)));
-            retval.Events = new List<Event>(SiteStatics.Context.Event.Where(x => x.Description.Contains(query, StringComparison.CurrentCultureIgnoreCase) || x.Title.Contains(query, StringComparison.CurrentCultureIgnoreCase)));
-            retval.Locations = new List<Location>(SiteStatics.Context.Locations.Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase)));
+            retval.ShipClasses = await SiteStatics.Context.ShipClasses
+                                                          .Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                                                          .ToListAsync();
+            retval.Vessels = await SiteStatics.Context.Vessels
+                                                .Include(x => x.ShipClass)
+                                                .Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                                                .ToListAsync();
+            retval.Events = await SiteStatics.Context.Event
+                                                     .Where(x => x.Description.Contains(query, StringComparison.CurrentCultureIgnoreCase) || x.Title.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                                                     .ToListAsync();
+            retval.Locations = await SiteStatics.Context.Locations
+                                                        .Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                                                        .ToListAsync();
 
 
 
